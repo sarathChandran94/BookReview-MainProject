@@ -2,6 +2,10 @@
 @import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 
 body {
-    background-color: lightgray;
-    padding-bottom: 30px;
+    /* background-color: lightgray; */
+    /* padding-bottom: 30px; */
+    background-image: linear-gradient(to top, #a8edea 0%, #fed6e3 100%);
+    background-repeat: repeat;
+    background-position: center;
+    background-size: cover;
 }
