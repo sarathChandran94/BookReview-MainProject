@@ -1,0 +1,21 @@
+{
+  "name": "bookreview-project",
+  "version": "1.0.0",
+  "description": "A website where users can view and review books. Submitted as a project to ICTAK - FSD-2020 Course",
+  "main": "app.js",
+  "dependencies": {
+    "body-parser": "",
+    "express": "",
+    "mongoose": "",
+    "bcrypt": "",
+    "multer": "",
+    "passport": "",
+    "jsonwebtoken": "",
+    "cors": ""
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Sarath C - FSD-2020 Koratty Batch",
+  "license": "ISC"
+}

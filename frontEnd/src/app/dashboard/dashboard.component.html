@@ -1,0 +1,241 @@
+<div class="container">
+    <h1>WELCOME, {{uname}}</h1>
+</div>
+
+<div class="container">
+    <!-- user reviews -->
+    <h6>My Reviews: </h6>
+    <div *ngFor="let review of reviews; let i= index" class="list">
+        <form class="form">
+        <div class="card">
+            <div class="card-body">
+                <div >
+                    <h5 class="card-title"><small class="text-muted">Book: </small>{{review.book.title}}</h5>
+                </div>
+                <div *ngIf="!editClicked[i]" [@expandCollapse]>
+                    <p class="card-text"><small class="text-muted">Review: </small>{{review.comment}}</p>
+                </div>
+                <div *ngIf="editClicked[i]" [@expandCollapse]>
+                    <textarea [(ngModel)]="newReview.comment" class="form-control card-text" type="text" name="comment" value="{{review.comment}}"></textarea>
+                </div>
+                <div *ngIf="!editClicked[i]" [@expandCollapse]>
+                    <p class="card-text"><small class="text-muted">Your rating: </small>{{review.rating}}</p>
+                </div>
+                <div *ngIf="editClicked[i]" class="form-inline" [@expandCollapse]>
+                    <label class="card-text" for="rating">New rating: </label>
+                    <input [(ngModel)]="newReview.rating" class="form-control card-text" type="number" name="rating" id="rating" max="5" min="0" value="{{review.rating}}">
+                </div>
+                <div class="btn-group m-2">
+                    <button class="btn btn-info" (click)="editClicked[i] = !editClicked[i]">{{editClicked[i]? 'Cancel' : 'Edit'}}</button>
+                    <button *ngIf="editClicked[i]" class="btn btn-success" (click)="editReview(review._id);editClicked[i] = !editClicked[i]">Edit Review</button>
+                    <button class="btn btn-danger" (click)="deleteReview(review._id)">Delete</button>
+                </div>
+            </div>
+        </div>
+        </form>
+    </div>
+</div>
+<br>
+<hr>
+<div class="container">
+    <!-- user books -->
+    <h6>Added Books: </h6>
+    <div *ngFor="let abook of books; let j = index" class="list">
+        <div class="card">
+            <div class="card-body">
+                <div class="card-title">
+                    <p>Book: {{abook.title}}</p>
+                </div>
+                <div *ngIf="hideEdit" class="text-center">
+                    <form (submit)="editedMyBook()" class="form-signin" #editForm="ngForm">
+                        <div class="card mt-3">
+                            <div class="card-header">
+                                <h1 class="h3 mb-3 font-weight-light">Edit book</h1>
+                            </div>
+                            <div class="card-body">
+
+                                <div class="err rounded">
+                                    <p>{{err}}</p>
+                                </div>
+
+                                <label for="etitle" class="sr-only">Title</label>
+                                <input [(ngModel)]="neweditedBook.title" name="title"  type="text" id="etitle" class="form-control" placeholder="Title" required>
+                                <!-- <div [hidden]="title.valid || title.pristine" class="alert alert-danger">
+                                    Invalid
+                                </div> -->
+
+                                <label for="eauthor" class="sr-only">Author</label>
+                                <input [(ngModel)]="neweditedBook.author" name="author" type="text" id="eauthor" class="form-control" placeholder="Author"  required>
+                                <!-- <div [hidden]="author.valid || author.pristine" class="alert alert-danger">
+                                    Invalid
+                                </div> -->
+
+                                <label for="esynopsis" class="sr-only">Synopsis</label>
+                                <textarea [(ngModel)]="neweditedBook.synopsis" name="synopsis" type="text" id="esynopsis" class="form-control" placeholder="Synopsis"  required></textarea>
+                                <!-- <div [hidden]="synopsis.valid || synopsis.pristine" class="alert alert-danger">
+                                    Invalid
+                                </div> -->
+
+                                <label for="egenre" class="sr-only">Genre</label>
+                                <input [(ngModel)]="neweditedBook.genre" name="genre" type="text" id="egenre" class="form-control" placeholder="Genre"  required>
+                                <!-- <div [hidden]="genre.valid || genre.pristine" class="alert alert-danger">
+                                    Invalid
+                                </div> -->
+
+                                <label for="elanguage" class="sr-only">Language</label>
+                                <input [(ngModel)]="neweditedBook.language" name="language" type="text" id="elanguage" class="form-control" placeholder="Language"  required>
+                                <!-- <div [hidden]="language.valid || language.pristine" class="alert alert-danger">
+                                    Invalid
+                                </div> -->
+
+                                <label for="eyear" class="sr-only">Year of Publication</label>
+                                <input [(ngModel)]="neweditedBook.year" name="year" type="number" id="eyear" class="form-control" placeholder="Year of Publication"  required>
+                                <!-- <div [hidden]="year.valid || year.pristine" class="alert alert-danger">
+                                    Invalid
+                                </div> -->
+
+                                <label for="eimage" class="sr-only">Image Url</label>
+                                <input [(ngModel)]="neweditedBook.image" name="image" type="text" id="eimage" class="form-control" placeholder="Cover Image Url">
+                                <!-- <div [hidden]="image.valid || image.pristine" class="alert alert-danger">
+                                    Invalid
+                                </div> -->
+
+                                <button class="btn btn-lg btn-warning btn-block mt-4" type="submit" [disabled]="!editForm.form.valid">EDIT</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="btn-group m-2">
+                    <button *ngIf="editBookClicked[j]" class="btn btn-success" (click)="editMyBook(abook._id);editBookClicked[j] = !editBookClicked[j]">Edit Book</button>
+                    <button class="btn btn-info" (click)="editBookClicked[j] = !editBookClicked[j]">{{editBookClicked[j]? 'Cancel' : 'Edit'}}</button>
+                    <button class="btn btn-danger" (click)="deleteMyBook(abook._id)">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br>
+<hr>
+
+<!-- Add new book -->
+<div class="text-center">
+    <form (submit)="addBook()" class="form-signin" #registerForm="ngForm">
+        <div class="card mt-3">
+            <div class="card-header">
+                <h1 class="h3 mb-3 font-weight-light">Add new book</h1>
+            </div>
+            <div class="card-body">
+
+                <div class="err rounded">
+                    <p>{{err}}</p>
+                </div>
+
+                <label for="title" class="sr-only">Title</label>
+                <input [(ngModel)]="book.title" name="title"  type="text" id="title" class="form-control" placeholder="Title" required>
+                <!-- <div [hidden]="title.valid || title.pristine" class="alert alert-danger">
+                    Invalid
+                </div> -->
+
+                <label for="author" class="sr-only">Author</label>
+                <input [(ngModel)]="book.author" name="author" type="text" id="author" class="form-control" placeholder="Author"  required>
+                <!-- <div [hidden]="author.valid || author.pristine" class="alert alert-danger">
+                    Invalid
+                </div> -->
+
+                <label for="synopsis" class="sr-only">Synopsis</label>
+                <textarea [(ngModel)]="book.synopsis" name="synopsis" type="text" id="synopsis" class="form-control" placeholder="Synopsis"  required></textarea>
+                <!-- <div [hidden]="synopsis.valid || synopsis.pristine" class="alert alert-danger">
+                    Invalid
+                </div> -->
+
+                <label for="genre" class="sr-only">Genre</label>
+                <input [(ngModel)]="book.genre" name="genre" type="text" id="genre" class="form-control" placeholder="Genre"  required>
+                <!-- <div [hidden]="genre.valid || genre.pristine" class="alert alert-danger">
+                    Invalid
+                </div> -->
+
+                <label for="language" class="sr-only">Language</label>
+                <input [(ngModel)]="book.language" name="language" type="text" id="language" class="form-control" placeholder="Language"  required>
+                <!-- <div [hidden]="language.valid || language.pristine" class="alert alert-danger">
+                    Invalid
+                </div> -->
+
+                <label for="year" class="sr-only">Year of Publication</label>
+                <input [(ngModel)]="book.year" name="year" type="number" id="year" class="form-control" placeholder="Year of Publication"  required>
+                <!-- <div [hidden]="year.valid || year.pristine" class="alert alert-danger">
+                    Invalid
+                </div> -->
+
+                <label for="year" class="sr-only">Image Url</label>
+                <input [(ngModel)]="book.image" name="image" type="text" id="image" class="form-control" placeholder="Cover Image Url">
+                <!-- <div [hidden]="image.valid || image.pristine" class="alert alert-danger">
+                    Invalid
+                </div> -->
+
+                <button class="btn btn-lg btn-primary btn-block mt-4" type="submit" [disabled]="!registerForm.form.valid">ADD</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!-- edit book -->
+<div *ngIf="hideEditAdmin" class="text-center">
+    <form (submit)="editedBook()" class="form-signin" #editForm="ngForm">
+        <div class="card mt-3">
+            <div class="card-header">
+                <h1 class="h3 mb-3 font-weight-light">Edit book</h1>
+            </div>
+            <div class="card-body">
+
+                <div class="err rounded">
+                    <p>{{err}}</p>
+                </div>
+
+                <label for="etitle" class="sr-only">Title</label>
+                <input [(ngModel)]="neweditedBook.title" name="title"  type="text" id="etitle" class="form-control" placeholder="Title" required>
+                <!-- <div [hidden]="title.valid || title.pristine" class="alert alert-danger">
+                    Invalid
+                </div> -->
+
+                <label for="eauthor" class="sr-only">Author</label>
+                <input [(ngModel)]="neweditedBook.author" name="author" type="text" id="eauthor" class="form-control" placeholder="Author"  required>
+                <!-- <div [hidden]="author.valid || author.pristine" class="alert alert-danger">
+                    Invalid
+                </div> -->
+
+                <label for="esynopsis" class="sr-only">Synopsis</label>
+                <textarea [(ngModel)]="neweditedBook.synopsis" name="synopsis" type="text" id="esynopsis" class="form-control" placeholder="Synopsis"  required></textarea>
+                <!-- <div [hidden]="synopsis.valid || synopsis.pristine" class="alert alert-danger">
+                    Invalid
+                </div> -->
+
+                <label for="egenre" class="sr-only">Genre</label>
+                <input [(ngModel)]="neweditedBook.genre" name="genre" type="text" id="egenre" class="form-control" placeholder="Genre"  required>
+                <!-- <div [hidden]="genre.valid || genre.pristine" class="alert alert-danger">
+                    Invalid
+                </div> -->
+
+                <label for="elanguage" class="sr-only">Language</label>
+                <input [(ngModel)]="neweditedBook.language" name="language" type="text" id="elanguage" class="form-control" placeholder="Language"  required>
+                <!-- <div [hidden]="language.valid || language.pristine" class="alert alert-danger">
+                    Invalid
+                </div> -->
+
+                <label for="eyear" class="sr-only">Year of Publication</label>
+                <input [(ngModel)]="neweditedBook.year" name="year" type="number" id="eyear" class="form-control" placeholder="Year of Publication"  required>
+                <!-- <div [hidden]="year.valid || year.pristine" class="alert alert-danger">
+                    Invalid
+                </div> -->
+
+                <label for="eimage" class="sr-only">Image Url</label>
+                <input [(ngModel)]="neweditedBook.image" name="image" type="text" id="eimage" class="form-control" placeholder="Cover Image Url">
+                <!-- <div [hidden]="image.valid || image.pristine" class="alert alert-danger">
+                    Invalid
+                </div> -->
+
+                <button class="btn btn-lg btn-warning btn-block mt-4" type="submit" [disabled]="!editForm.form.valid">EDIT</button>
+            </div>
+        </div>
+    </form>
+</div>

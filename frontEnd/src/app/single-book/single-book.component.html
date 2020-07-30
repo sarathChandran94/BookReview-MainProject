@@ -1,0 +1,59 @@
+<div class="row border">
+    <div class="col-md-2 border-right border-muted" style="width: 100%;">
+
+    </div>
+    <div class="col-md-8">
+        <div class="row m-3">
+            <div class="col-md-3 p-1 border rounded-lg" >
+                <img [src]="book.image" style="width: 200px;height: 300px" class="card-img rounded-lg" alt="coverImage">
+            </div>
+            <div class="col-md-9">
+                <h3 class="text text-uppercase">{{book.title}}</h3>
+                <p class="text font-italic">{{book.author}}</p>
+                <p class="text">{{book.synopsis}}</p>
+                <p class="text font-weight-normal"><small class="text-muted">Language: </small>{{book.language}}</p>
+                <p class="text font-weight-normal"><small class="text-muted">Genre: </small>{{book.genre}}</p>
+                <p class="text font-weight-normal"><small class="text-muted">Year: </small>{{book.year}}</p>
+                <p class="text font-weight-normal"><small class="text-muted">Avg. Rating: </small>⭐{{book.avgRating | number: '1.1-2'}}</p>
+            </div>
+        </div>
+        <hr>
+        <div class="container">
+            <h3>Reviews:</h3>
+            <div *ngFor="let review of book.review" class="list border rounded p-3">
+                <p class="text text-capitalize text-center font-weight-bold">{{review.title}}</p>
+                <div class="row justify-content-start">
+                    <div class="col-md-2">
+                        <p><small class="text text-muted text-capitalize font-italic">{{review.username}}</small></p>
+                    </div>
+                    <div class="col-md-2">
+                        <p><small class="text-muted">{{review.created | date: ShortDate}}</small></p>
+                    </div>
+                </div>
+                <p class="text font-weight-bold"><span class="text font-weight-light">Rating:</span>⭐{{review.rating}}</p>
+                <p class="text font-weight-normal">{{review.comment}}</p>
+            </div>
+            <hr>
+            <div *ngIf="this.authService.loggedIn()">
+                <h6>Add your review: </h6>
+                <form (submit)="addReview()" class="form-group" #revForm="ngForm">
+                    <div *ngIf="!addReviewDone">
+                        <input [(ngModel)]="review.title" class="form-control mb-3" type="text" name="title" id="title" placeholder="Title" required>
+                        <textarea [(ngModel)]="review.comment" class="form-control mb-3" name="comment" id="bookreview" cols="60" rows="4" placeholder="review" required></textarea>
+                        <!-- <div class="form-group"> -->
+                            <div class="form-inline mb-3">
+                                <label for="rating">Your rating: </label>
+                                <input [(ngModel)]="review.rating" class="form-control" type="number" name="rating" id="rating" max="5" min="0" placeholder="0-5" required>
+                            </div>
+                        <!-- </div> -->
+                        <button type="submit" class="btn btn-primary" [disabled]="revForm.form.pristine">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-2 border-left border-muted">
+
+    </div>
+
+</div>

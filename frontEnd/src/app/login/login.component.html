@@ -1,0 +1,33 @@
+
+<div class="text-center">
+    <form (ngSubmit)="loginUser()" class="form-signin" #loginForm="ngForm">
+        <div class="card mt-3">
+            <div class="card-header">
+                <h1 class="h3 mb-3 font-weight-light">Login</h1>
+            </div>
+            <div class="card-body">
+
+                <div class="err rounded">
+                    <p>{{err}}</p>
+                </div>
+
+                <label for="inputEmail" class="sr-only">Email address</label>
+                <input name="email" [(ngModel)]="user.email" type="email" id="inputEmail" class="form-control" placeholder="Email address" #email="ngModel" pattern="[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*" required>
+                <div [hidden]="email.valid || email.pristine" class="alert alert-danger">
+                    Invalid
+                </div>
+
+                <label for="inputPassword" class="sr-only">Password</label>
+                <input name="password" [(ngModel)]="user.password" type="password" id="inputPassword" class="form-control" placeholder="Password" #password="ngModel" required>
+                <div [hidden]="password.valid || password.pristine" class="alert alert-danger">
+                    Invalid
+                </div>
+
+                <button class="btn btn-lg btn-primary btn-block mt-4" type="submit" [disabled]="!loginForm.form.valid">LOGIN</button>
+            </div>
+            <div class="card-footer">
+                <p>New here? <a routerLink='/register'> SIGNUP</a></p>
+            </div>
+        </div>
+    </form>
+</div>
